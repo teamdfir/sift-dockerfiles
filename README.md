@@ -1,3 +1,5 @@
+[![Logo](https://digital-forensics.sans.org/images/sift.png)
+
 # SIFT Dockerfiles
 
 A collection of Dockerfile instruction files uses to build docker images that pertain to the SIFT distribution.
