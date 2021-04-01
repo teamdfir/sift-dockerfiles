@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Setup Docker Metadata
         id: docker_metadata
-        uses: crazy-max/ghaction-docker-meta@v1
+        uses: crazy-max/ghaction-docker-meta@v2
         with:
           images: |
             docker.io/teamdfir/sift-saltstack-tester
