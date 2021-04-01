@@ -40,7 +40,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: ./sift-saltstack-tester
-          file: Dockerfile.${{ matrix.os }}
+          file: ./sift-saltstack-tester/Dockerfile.${{ matrix.os }}
           build-args: |
             SALTVERSION=${{ matrix.salt }}
           push: ${{ github.event_name != 'pull_request' }}
