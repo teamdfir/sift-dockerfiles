@@ -26,7 +26,9 @@ jobs:
         uses: crazy-max/ghaction-docker-meta@v1
         with:
           images: |
-            docker.io/teamdfir/sift-saltstack-tester:${{ matrix.os }}-${{ matrix.salt }}
+            docker.io/teamdfir/sift-saltstack-tester
+          tags: |
+            type=raw,value=${{ matrix.os }}-${{ matrix.salt }}
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v1
       - name: Login to Docker Hub
