@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [bionic, focal]
-        salt: [3001, 3002, 3003]
+        salt: [3003, 3004]
 
     env:
       GIT_SHA: ${GITHUB_SHA::8}
