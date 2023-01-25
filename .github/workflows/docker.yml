@@ -47,7 +47,9 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: |
-            ghcr.io/teamdfir/sift-saltstack-tester:${{ matrix.salt }}-${{ matrix.code }}
+            ghcr.io/teamdfir/sift-saltstack-tester
+          tags: |
+            type=raw,value=${{ matrix.salt }}-${{ matrix.code }}
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
