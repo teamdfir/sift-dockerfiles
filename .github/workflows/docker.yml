@@ -1,47 +1,61 @@
 name: docker
 
 on:
-  workflow_dispatch:
   push:
     branches:
-      - master
+      - "master"
 
 jobs:
-  build-saltstack-tester:
+  docker:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
-        os: [bionic, focal]
-        salt: [3003, 3004]
-
-    env:
-      GIT_SHA: ${GITHUB_SHA::8}
+        salt: [3004, 3005]
+        include:
+          - salt: 3004
+            os: 18.04
+            code: bionic
+          - salt: 3004
+            os: 20.04
+            code: focal
+          - salt: 3004
+            os: 22.04
+            code: jammy
+          - salt: 3005
+            os: 20.04
+            code: focal
+          - salt: 3005
+            os: 22.04
+            code: jammy
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: Set up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Setup Docker Metadata
         id: docker_metadata
-        uses: crazy-max/ghaction-docker-meta@v2
+        uses: docker/metadata-action@v4
         with:
           images: |
-            docker.io/teamdfir/sift-saltstack-tester
-          tags: |
-            type=raw,value=${{ matrix.os }}-${{ matrix.salt }}
-      - name: Setup Docker Buildx
-        uses: docker/setup-buildx-action@v1
-      - name: Login to Docker Hub
-        uses: docker/login-action@v1
+            ghcr.io/teamdfir/sift-saltstack-tester
+      - name: Build and push
+        uses: docker/build-push-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build
-        uses: docker/build-push-action@v2
-        with:
-          context: ./sift-saltstack-tester
-          file: ./sift-saltstack-tester/Dockerfile.${{ matrix.os }}
           build-args: |
             SALTVERSION=${{ matrix.salt }}
-          push: ${{ github.event_name != 'pull_request' }}
+            OSVERSION=${{ matrix.os }}
+            OSCODE=${{ matrix.code }}
+          file: ./Dockerfile.${{ matrix.salt }}
+          push: true
           tags: ${{ steps.docker_metadata.outputs.tags }}
+          labels: ${{ steps.docker_metadata.outputs.labels }}
+          cache-to: type=inline
