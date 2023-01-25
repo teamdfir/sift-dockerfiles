@@ -1,0 +1,17 @@
+ARG OSVERSION=22.04
+
+FROM ubuntu:$OSVERSION
+
+ARG OSVERSION=22.04
+ARG SALTVERSION=3005
+ARG OSCODE=jammy
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN \
+  apt-get update && \
+  apt-get install -y wget gnupg git && \
+  wget -O - "https://repo.saltproject.io/salt/py3/ubuntu/${OSVERSION}/amd64/$SALTVERSION/salt-archive-keyring.gpg" | apt-key add - && \
+  echo "deb http://repo.saltproject.io/salt/py3/ubuntu/$OSVERSION/amd64/$SALTVERSION $OSCODE main" | tee /etc/apt/sources.list.d/saltstack.list && \
+  apt-get update && \
+  apt-get install -y salt-common
