@@ -11,23 +11,23 @@ jobs:
     strategy:
       matrix:
         salt: [3004, 3005]
+        os: [18.04, 20.04, 22.04]
         include:
           - salt: 3004
             type: legacy
           - salt: 3005
             type: onedir
-          - salt: 3004
-            os: 18.04
+          - os: 18.04
             code: bionic
-          - salt: 3004
-            os: 20.04
+          - os: 20.04
             code: focal
-          - salt: 3005
-            os: 20.04
-            code: focal
-          - salt: 3005
-            os: 22.04
+          - os: 22.04
             code: jammy
+        exclude:
+          - salt: 3004
+            os: 22.04
+          - salt: 3005
+            os: 18.04
 
     steps:
       - name: Set up QEMU
