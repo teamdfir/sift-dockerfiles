@@ -1,0 +1,16 @@
+ARG SALTVERSION=3004
+ARG OSVERSION=18.04
+ARG OSCODE=bionic
+
+
+FROM ubuntu:$OSCODE
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN \
+  apt-get update && \
+  apt-get install -y wget gnupg git && \
+  wget -O - https://repo.saltproject.io/py3/ubuntu/${OSVERSION}/amd64/${SALTVERSION}/salt-archive-keyring.gpg | apt-key add - && \
+  echo "deb http://repo.saltproject.io/py3/ubuntu/${OSVERSION}/amd64/${SALTVERSION} ${OSCODE} main" | tee /etc/apt/sources.list.d/saltstack.list && \
+  apt-get update && \
+  apt-get install -y salt-common

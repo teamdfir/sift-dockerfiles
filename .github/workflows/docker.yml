@@ -54,7 +54,7 @@ jobs:
             SALTVERSION=${{ matrix.salt }}
             OSVERSION=${{ matrix.os }}
             OSCODE=${{ matrix.code }}
-          file: ./Dockerfile.${{ matrix.salt }}
+          file: ./sift-saltstack-tester/Dockerfile.${{ matrix.salt }}
           push: true
           tags: ${{ steps.docker_metadata.outputs.tags }}
           labels: ${{ steps.docker_metadata.outputs.labels }}
