@@ -14,10 +14,6 @@ jobs:
         salt: [3006, 3007]
         os: [22.04, 24.04]
         include:
-          - os: 18.04
-            code: bionic
-          - os: 20.04
-            code: focal
           - os: 22.04
             code: jammy
           - os: 24.04
