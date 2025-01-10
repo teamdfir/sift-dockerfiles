@@ -10,24 +10,17 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        salt: [3004, 3005]
-        os: [18.04, 20.04, 22.04]
+        salt: [3006, 3007]
+        os: [22.04, 24.04]
         include:
-          - salt: 3004
-            type: legacy
-          - salt: 3005
-            type: onedir
           - os: 18.04
             code: bionic
           - os: 20.04
             code: focal
           - os: 22.04
             code: jammy
-        exclude:
-          - salt: 3004
-            os: 22.04
-          - salt: 3005
-            os: 18.04
+          - os: 24.04
+            code: noble
 
     steps:
       - name: Set up QEMU
@@ -53,11 +46,12 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
+          platforms: linux/amd64,linux/arm64
           build-args: |
             SALTVERSION=${{ matrix.salt }}
             OSVERSION=${{ matrix.os }}
             OSCODE=${{ matrix.code }}
-          file: ./sift-saltstack-tester/Dockerfile.${{ matrix.type }}
+          file: ./sift-saltstack-tester/Dockerfile
           push: true
           tags: ${{ steps.docker_metadata.outputs.tags }}
           labels: ${{ steps.docker_metadata.outputs.labels }}
